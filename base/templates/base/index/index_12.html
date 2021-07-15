@@ -1,0 +1,56 @@
+{% comment %}
+<section class="section blog-part">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="section-heading"><h2>Our latest blogs</h2></div>
+      </div>
+    </div>
+
+    <div class="row">
+      {% for blog in blogs %}
+      <div class="col-lg-4 col-sm-6">
+        <div class="blog-card">
+          <div class="blog-media">
+            <a class="blog-img" href="#"
+              ><img src=" {{ blog.image.url }} " alt="blog"
+            /></a>
+            <div class="blog-calender">
+              <span class="blog-date"> {{ blog.created_at }} </span
+              ><span class="blog-month"> {{ blog.created_at }} </span>
+            </div>
+          </div>
+          <div class="blog-content">
+            <ul class="blog-meta">
+              <li>
+                <i class="icofont-speech-comments"></i><span>03 comments</span>
+              </li>
+              <li>
+                <i class="icofont-share-boxed"></i
+                ><span> {{ blog.share }} share</span>
+              </li>
+            </ul>
+            <h4 class="blog-title">
+              <a href="blog-details.html"> {{ blog.title }} </a>
+            </h4>
+            <a class="blog-btn" href="blog-details.html"
+              ><span>read more</span><i class="icofont-arrow-right"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="section-btn-25">
+          <a href="blog-grid.html" class="btn btn-outline"
+            ><i class="icofont-eye-alt"></i><span>show more</span></a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endcomment %}
