@@ -31,3 +31,13 @@ def sub_cat_finder(cat):
 def product_finder(_id):
     product = Product.objects.get(pk=_id)
     return product
+
+
+@register.filter
+def looper(limit):
+    '''<option>2</option>'''
+    options = ''
+    for r in range(1, 1 + int(limit)):
+        options += f'<option>{r}</option>'
+
+    return options

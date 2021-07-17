@@ -87,7 +87,7 @@ class Subscribe(models.Model):
 class Custom_User(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     avatar = models.FileField(
-        upload_to='profile/avatar/', default='profile/avatar/avatar.jpg', blank=True, null=True)
+        upload_to='profile/avatar/', default='default_profile320.png', blank=True, null=True)
 
     join_date = models.DateTimeField(auto_now_add=True)
     delivery_address = models.TextField(blank=True, null=True, default='None')
@@ -98,6 +98,13 @@ class Custom_User(models.Model):
     def delete(self, *args, **kwargs):
         self.avatar.delete()
         super().delete(*args, **kwargs)
+
+    def get_avatar(self):
+        try:
+            avatar = self.avatar.url
+            return avatar
+        except:
+            return '/media/default_profile320.png'
 
 
 class Contact_Number(models.Model):

@@ -96,7 +96,8 @@
           <h3 class="details-price">
             <del>৳ {{ product.price }} </del
             ><span
-              >৳ {{ product.discount_price }} <small>/per kilo</small></span
+              >৳ {{ product.discount_price }}
+              <small>/per {{product.unit}}</small></span
             >
           </h3>
           <p class="details-desc">{{ product.description }}</p>
@@ -108,6 +109,11 @@
               <li><a href="#"> {{ tag }} </a></li>
               {% endfor %}
             </ul>
+          </div>
+
+          <div class="details-list-group">
+            <label class="details-list-title">Count in store:</label>
+            {{product.count_in_stock}}
           </div>
 
           <div class="details-list-group">
@@ -133,17 +139,32 @@
               {% csrf_token %}
 
               <input type="hidden" name="product_id" value="{{product.id}}" />
-              <input
-                class="form-control my-3"
-                type="text"
-                placeholder="Quantity"
-                name="quantity"
-                required
-              />
+              <div class="form-group">
+                <label for="exampleSelect2" class="">select quantity</label>
+                <select
+                  multiple=""
+                  class=""
+                  id="exampleSelect2"
+                  name="quantity"
+                >
+                  {{ product.count_in_stock|looper|safe }}
+                </select>
+              </div>
 
+              {% if product.count_in_stock <= 0 %}
+              <button
+                type="submit"
+                class="product-add"
+                title="Add to Cart"
+                disabled
+              >
+                <i class="icofont-cart"></i><span>out of ctock</span>
+              </button>
+              {%else%}
               <button type="submit" class="product-add" title="Add to Cart">
                 <i class="icofont-cart"></i><span>add to cart</span>
               </button>
+              {% endif %}
             </form>
 
             <div class="product-action">

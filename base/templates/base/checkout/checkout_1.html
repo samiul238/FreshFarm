@@ -1,3 +1,5 @@
+{% load base_tags %}
+
 <section class="inner-section checkout-part">
   <div class="container">
     <div class="row">
@@ -32,7 +34,7 @@
                 <tbody>
                   {% for products in carts %}
                   <tr>
-                    <td class="table-serial"><h6>01</h6></td>
+                    <td class="table-serial"><h6>{{forloop.counter}}</h6></td>
                     <td class="table-image">
                       <img
                         src=" {{products.product.image.url}} "
@@ -40,18 +42,64 @@
                       />
                     </td>
                     <td class="table-name">
-                      <h6>{{products.product.name}}</h6>
+                      <h6> <a href=" {% url 'products:product_details' products.product.id %} ">
+                      {{products.product.name}}
+                      </a> </h6>
                     </td>
                     <td class="table-price">
                       <h6>
-                        ৳{{products.product.discount_price}}<small>/kilo</small>
+                        ৳{{products.product.discount_price}}<small>/{{products.product.unit}}</small>
                       </h6>
                     </td>
                     <td class="table-brand">
                       <h6>{{products.product.brand}}</h6>
                     </td>
                     <td class="table-quantity">
+                    <form action=" {% url 'products:edit_cart' %} " method="POST">
+                        {% csrf_token %}
+
+                        <input type="hidden" name="type" value="decrease" />
+                        <input type="hidden" name="cart_id" value="{{products.id}}" />
+                        <div class="form-group">
+                          <label for="exampleSelect2" class="">decrease quantity</label>
+                          <select
+                            multiple=""
+                            class=""
+                            id="exampleSelect2"
+                            name="quantity"
+                          >
+                            {{ products.quantity|looper|safe }}
+                          </select>
+                        </div>
+                        <button type="submit" class="product-add" title="Add to Cart">
+                          <span>decrease quantity</span>
+                        </button>
+                      </form>
+
                       <h6>{{products.quantity}}</h6>
+                      
+                      <form action=" {% url 'products:edit_cart' %} " method="POST">
+                        {% csrf_token %}
+
+                        <input type="hidden" name="type" value="increase" />
+                        <input type="hidden" name="cart_id" value="{{products.id}}" />
+                        <div class="form-group">
+                          <label for="exampleSelect2" class="">add quantity</label>
+                          <select
+                            multiple=""
+                            class=""
+                            id="exampleSelect2"
+                            name="quantity"
+                          >
+                            {{ products.product.count_in_stock|looper|safe }}
+                          </select>
+                        </div>
+                        <button type="submit" class="product-add" title="Add to Cart">
+                          <span>increase quantity</span>
+                        </button>
+                      </form>
+
+                      
                     </td>
                     <td class="table-action">
                       {% comment %}

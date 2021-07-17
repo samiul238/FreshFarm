@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from base.models import Custom_User
+from multiselectfield import MultiSelectField
 
 
 class Category(models.Model):
@@ -24,13 +25,18 @@ class Sub_Category(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=100)
-    image = models.FileField(upload_to='products/')
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True)
-
     sub_category = models.ForeignKey(
         Sub_Category, on_delete=models.SET_NULL, null=True)
+
+    name = models.CharField(max_length=100)
+    unit_choices = (
+        ('kilo', 'kilo'),
+        ('piece', 'piece')
+    )
+    unit = models.CharField(max_length=30, choices=unit_choices)
+    image = models.FileField(upload_to='products/')
 
     product_id = models.CharField(max_length=30, blank=True, null=True)
     description = models.TextField()
@@ -39,6 +45,8 @@ class Product(models.Model):
     brand = models.CharField(max_length=30, blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     views = models.IntegerField(default=0, blank=True, null=True)
+    star_rating = models.CharField(max_length=20)
+    count_in_stock = models.IntegerField(default=1)
 
     discount_price = models.DecimalField(
         max_digits=10, decimal_places=2, blank=True, null=True)
@@ -46,7 +54,12 @@ class Product(models.Model):
     discount_percent = models.DecimalField(
         max_digits=5, decimal_places=2, blank=True, null=True)
 
-    featured_post = models.BooleanField(default=False, blank=True, null=True)
+    include_choices = (
+        ('new', 'new'),
+        ('featured', 'featured'),
+        ('sale', 'sale')
+    )
+    include = MultiSelectField(choices=include_choices, blank=True)
     video = models.FileField(
         upload_to='products/video/', default='product_video', blank=True, null=True)
 
@@ -59,6 +72,8 @@ class Product(models.Model):
                 map(lambda x: x.strip(), self.tags.split(',')))
         else:
             self.tag_list = '["No Tags"]'
+
+        self.star_rating = self.rating()
         super(Product, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -106,6 +121,9 @@ class Cart(models.Model):
 
     def __str__(self):
         return str(self.user) + ': ' + str(self.product) + ' (' + str(self.quantity) + ')'
+
+    # def serial(self):
+    #     cart = Cart.objects.all()
 
 
 class Order(models.Model):
@@ -174,3 +192,9 @@ class Rating(models.Model):
 
     def __str__(self):
         return str(self.product) + ': ' + str(self.star) + ' stars'
+
+    def save(self, *args, **kwargs):
+        super(Rating, self).save(*args, **kwargs)
+        p = Product.objects.get(pk=self.product.id)
+        p.star_rating = p.rating()
+        p.save()

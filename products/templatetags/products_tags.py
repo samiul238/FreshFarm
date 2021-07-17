@@ -16,3 +16,13 @@ def reply(review):
     replies = list(replies)
     replies.reverse()
     return replies
+
+
+@register.filter
+def looper(limit):
+    '''<option>2</option>'''
+    options = ''
+    for r in range(1, 1+limit):
+        options += f'<option>{r}</option>'
+
+    return options

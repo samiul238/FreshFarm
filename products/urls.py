@@ -13,6 +13,7 @@ urlpatterns = [
 
     # post url
     path('add_to_cart/', add_to_cart, name='add_to_cart'),
+    path('edit_cart/', edit_cart, name='edit_cart'),
     path('add_to_reviews/', add_to_reviews, name='add_to_reviews'),
     path('add/rev/pro/<int:rev_pk>/<int:pro_pk>/',
          add_rep_rev, name='add_rep_rev'),

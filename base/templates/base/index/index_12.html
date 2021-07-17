@@ -1,4 +1,3 @@
-{% comment %}
 <section class="section blog-part">
   <div class="container">
     <div class="row">
@@ -12,7 +11,7 @@
       <div class="col-lg-4 col-sm-6">
         <div class="blog-card">
           <div class="blog-media">
-            <a class="blog-img" href="#"
+            <a class="blog-img" href=" {% url 'blog:blog_details' blog.id %} "
               ><img src=" {{ blog.image.url }} " alt="blog"
             /></a>
             <div class="blog-calender">
@@ -23,7 +22,8 @@
           <div class="blog-content">
             <ul class="blog-meta">
               <li>
-                <i class="icofont-speech-comments"></i><span>03 comments</span>
+                <i class="icofont-speech-comments"></i
+                ><span>{{blog.comment_count}} comments</span>
               </li>
               <li>
                 <i class="icofont-share-boxed"></i
@@ -31,7 +31,9 @@
               </li>
             </ul>
             <h4 class="blog-title">
-              <a href="blog-details.html"> {{ blog.title }} </a>
+              <a href=" {% url 'blog:blog_details' blog.id %} ">
+                {{ blog.title }}
+              </a>
             </h4>
             <a class="blog-btn" href="blog-details.html"
               ><span>read more</span><i class="icofont-arrow-right"></i
@@ -45,7 +47,7 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="section-btn-25">
-          <a href="blog-grid.html" class="btn btn-outline"
+          <a href=" {% url 'blog:index' %} " class="btn btn-outline"
             ><i class="icofont-eye-alt"></i><span>show more</span></a
           >
         </div>
@@ -53,4 +55,3 @@
     </div>
   </div>
 </section>
-{% endcomment %}

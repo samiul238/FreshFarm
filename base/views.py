@@ -35,11 +35,21 @@ def dictionary_merger(dictionary, request):
 
 @csrf_exempt
 def index(request):
-    products = Product.objects.all()
+    products = Product.objects.all().order_by('-id')
+    top_rated = Product.objects.all().order_by('star_rating')
 
-    latest_products = list(products)
-    latest_products.reverse()
-    latest_products = latest_products[0:10]
+    sold_items = []
+    featured_products = []
+    new_products = []
+    for x in products:
+        if 'sale' in x.include and len(sold_items) <= 10:
+            sold_items.append(x)
+        if 'featured' in x.include and len(featured_products) <= 10:
+            featured_products.append(x)
+        if 'new' in x.include and len(new_products) <= 10:
+            new_products.append(x)
+        if len(sold_items) >= 10 and len(featured_products) >= 10 and len(new_products) >= 10:
+            break
 
     blogs = list(Blog.objects.all())[-3::]
     blogs.reverse()
@@ -47,10 +57,12 @@ def index(request):
     data = {
         'title': 'Fresh Farm',
         'home_banners': Home_Banner.objects.all(),
-        'latest_products': latest_products,
-        'featured_products': Product.objects.filter(featured_post=True),
+        'sold_items': sold_items,
+        'featured_products': featured_products,
+        'new_products': new_products,
         'blogs': blogs,
         'brands': Brand.objects.all(),
+        'top_rated': top_rated
     }
 
     data = dictionary_merger(data, request)
@@ -187,7 +199,10 @@ def del_cart(request, pk):
     if request.method == 'POST':
         cart = Cart.objects.get(pk=pk)
         if request.user == cart.user:
+            product = Product.objects.get(pk=cart.product.id)
+            product.count_in_stock += int(cart.quantity)
             cart.delete()
+            product.save()
             return redirect('base:checkout')
 
 
@@ -393,7 +408,8 @@ def add_to_custom_user(request):
         email = d['email']
         try:
             avatar = request.FILES['avatar']
-            cu.avatar.delete()
+            if not 'default_profile320.png' in str(cu.avatar):
+                cu.avatar.delete()
             cu.avatar = avatar
         except:
             pass

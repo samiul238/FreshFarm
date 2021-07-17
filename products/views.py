@@ -10,7 +10,7 @@ def index(request):
     one_page = False
     products = list(Product.objects.all())
     products.reverse()
-    num_of_post = 1
+    num_of_post = 16
     page_no = request.GET.get('page', 1)
 
     if int(page_no) > 1:
@@ -142,8 +142,9 @@ def product_details(request, pk):
         reviews = list(Review.objects.filter(product=pk))
         reviews.reverse()
 
-        related_products = list(Product.objects.filter(
-            sub_category=product.sub_category))
+        # related_products = list(Product.objects.filter(
+        #     sub_category=product.sub_category))
+        related_products = list(Product.objects.all())
         related_products.reverse()
 
         data = {
@@ -151,7 +152,7 @@ def product_details(request, pk):
             'product': product,
             'reviews': reviews,
             'reviews_count': len(reviews),
-            'related_products': related_products,
+            'related_products': related_products[0:10],
         }
 
         data = dictionary_merger(data, request)
@@ -164,11 +165,49 @@ def add_to_cart(request):
 
     if request.method == 'POST':
         product = get_object_or_404(Product, pk=request.POST['product_id'])
-        cart = Cart(product=product, user=request.user,
-                    quantity=request.POST['quantity'])
+        quantity = request.POST['quantity']
+        cart = Cart(
+            product=product,
+            user=request.user,
+            quantity=quantity
+        )
         cart.save()
+        product.count_in_stock -= int(quantity)
+        product.save()
+
+        try:
+            red = request.POST['redirect']
+        except:
+            red = None
+
+        if red:
+            return redirect(red)
 
         return redirect('products:product_details', product.id)
+
+
+def edit_cart(request):
+    if not request.user.is_authenticated:
+        return redirect('base:login_user')
+
+    if request.method == 'POST':
+        d = request.POST
+        cart = Cart.objects.get(pk=d['cart_id'])
+        product = Product.objects.get(pk=cart.product.id)
+
+        if d['type'] == 'increase':
+            cart.quantity += int(d['quantity'])
+            product.count_in_stock -= int(d['quantity'])
+        elif d['type'] == 'decrease':
+            cart.quantity -= int(d['quantity'])
+            product.count_in_stock += int(d['quantity'])
+        else:
+            printer('cart edit gone wrong')
+
+        product.save()
+        cart.save()
+
+        return redirect('base:checkout')
 
 
 def add_to_reviews(request):
