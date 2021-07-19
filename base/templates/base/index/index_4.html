@@ -46,7 +46,6 @@
                   data-vbtype="video"
                 ></a>
 
-                {% comment %}
                 <a
                   title="Product View"
                   href="#"
@@ -54,7 +53,6 @@
                   data-bs-toggle="modal"
                   data-bs-target="#product-view"
                 ></a>
-                {% endcomment %}
               </div>
             </div>
             <div class="product-content">
@@ -86,7 +84,7 @@
                 <input type="hidden" name="product_id" value="{{product.id}}" />
                 <input type="hidden" name="quantity" value="1" />
                 <input type="hidden" name="redirect" value="base:index" />
-                <button class="btn btn-success" title="Add to Cart">
+                <button class="btn btn-success btn-sm" title="Add to Cart">
                   <i class="icofont-cart"></i><span>add</span>
                 </button>
               </form>

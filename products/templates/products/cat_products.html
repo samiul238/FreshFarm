@@ -301,11 +301,28 @@
                   <del>৳{{product.price}}</del
                   ><span>৳{{product.discount_price}}<small>/piece</small></span>
                 </h6>
-                {% comment %}
-                <button class="product-add" title="Add to Cart">
-                  <i class="icofont-cart"></i><span>add</span>
-                </button>
-                {% endcomment %}
+                <form method="POST" action=" {% url 'products:add_to_cart' %} ">
+                  {% csrf_token %}
+                  <input
+                    type="hidden"
+                    name="product_id"
+                    value="{{product.id}}"
+                  />
+                  <input type="hidden" name="quantity" value="1" />
+                  <input
+                    type="hidden"
+                    name="argu"
+                    value="{{product.category}}"
+                  />
+                  <input
+                    type="hidden"
+                    name="redirect"
+                    value="products:cat_products"
+                  />
+                  <button class="btn btn-success btn-sm" title="Add to Cart">
+                    <i class="icofont-cart"></i><span>add</span>
+                  </button>
+                </form>
                 <div class="product-action">
                   <button class="action-minus" title="Quantity Minus">
                     <i class="icofont-minus"></i></button

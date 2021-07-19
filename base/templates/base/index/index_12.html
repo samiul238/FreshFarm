@@ -15,8 +15,9 @@
               ><img src=" {{ blog.image.url }} " alt="blog"
             /></a>
             <div class="blog-calender">
-              <span class="blog-date"> {{ blog.created_at }} </span
-              ><span class="blog-month"> {{ blog.created_at }} </span>
+              <span class="blog-date text-center">
+                {{ blog.created_at|date:"d M"}}
+              </span>
             </div>
           </div>
           <div class="blog-content">

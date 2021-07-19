@@ -89,7 +89,7 @@ class Product(models.Model):
             stars += rating.star
 
         try:
-            avg_rating = stars / len(ratings)
+            avg_rating = round(stars / len(ratings), 2)
         except ZeroDivisionError:
             avg_rating = 'Not rated'
 

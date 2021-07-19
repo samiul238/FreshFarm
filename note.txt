@@ -22,6 +22,9 @@ password: user
 09. Pop up product details
 
 
-# cart serial --/--
-# default image --/--
-# add on cart
+
+# another option beside review
+# decimal rating limite
+# 
+
+

@@ -180,7 +180,14 @@ def add_to_cart(request):
         except:
             red = None
 
+        try:
+            argu = request.POST['argu']
+        except:
+            argu = None
+
         if red:
+            if argu:
+                return redirect(red, argu)
             return redirect(red)
 
         return redirect('products:product_details', product.id)
