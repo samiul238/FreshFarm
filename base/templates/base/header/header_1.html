@@ -73,6 +73,10 @@
         {% else %}
 
         <form method='POST' action=" {% url 'base:logout_user' %} ">
+        <img style="width:20px;height:20px;display:inline-block;" 
+        src=" {{custom_user.get_avatar}} " 
+        alt="{{custom_user.get_avatar}} " 
+        />
         {% csrf_token %}
         <button  type="submit"> <span class='px-3'>Logout</span> </button>
         </form

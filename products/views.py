@@ -173,6 +173,7 @@ def add_to_cart(request):
         )
         cart.save()
         product.count_in_stock -= int(quantity)
+        product.order_count += 1
         product.save()
 
         try:

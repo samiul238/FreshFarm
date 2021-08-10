@@ -37,6 +37,10 @@ def dictionary_merger(dictionary, request):
 def index(request):
     products = Product.objects.all().order_by('-id')
     top_rated = Product.objects.all().order_by('star_rating')
+    top_discount = Product.objects.all().order_by('-discount_percent')
+    top_order = Product.objects.all().order_by('-order_count')
+
+    # printer(top_discount)
 
     sold_items = []
     featured_products = []
@@ -62,7 +66,9 @@ def index(request):
         'new_products': new_products,
         'blogs': blogs,
         'brands': Brand.objects.all(),
-        'top_rated': top_rated
+        'top_rated': top_rated,
+        'top_discount': top_discount,
+        'top_order': top_order,
     }
 
     data = dictionary_merger(data, request)

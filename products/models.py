@@ -47,6 +47,7 @@ class Product(models.Model):
     views = models.IntegerField(default=0, blank=True, null=True)
     star_rating = models.CharField(max_length=20)
     count_in_stock = models.IntegerField(default=1)
+    order_count = models.IntegerField(default=1)
 
     discount_price = models.DecimalField(
         max_digits=10, decimal_places=2, blank=True, null=True)
@@ -74,6 +75,10 @@ class Product(models.Model):
             self.tag_list = '["No Tags"]'
 
         self.star_rating = self.rating()
+
+        self.discount_percent = round(
+            (100 / self.price) * (self.price - self.discount_price), 2)
+
         super(Product, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):

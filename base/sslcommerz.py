@@ -12,7 +12,7 @@ def sslcommerz_payment_gateway(request, amount, tran_id):
     settings = {'store_id': gateway_auth_details.store_id,
                 'store_pass': gateway_auth_details.store_pass, 'issandbox': True}
 
-    url = 'SamiulSany007.pythonanywhere.com'
+    url = 'https://himelbikon.pythonanywhere.com/'
     # url = "http://127.0.0.1:8000/"
 
     sslcommez = SSLCOMMERZ(settings)
